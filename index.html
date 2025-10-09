@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejoins-moi sur Bloxy World!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .code-display {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            letter-spacing: 2px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .spinner {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎮</div>
+        <h1>Rejoins-moi sur Bloxy World!</h1>
+        <p class="subtitle">Utilise mon code de parrainage et gagne des récompenses!</p>
+        
+        <div class="code-display" id="codeDisplay">
+            Chargement...
+        </div>
+        
+        <div class="spinner" id="spinner"></div>
+        
+        <a href="#" class="btn" id="downloadBtn">
+            📱 Télécharger depuis Google Play
+        </a>
+        
+        <button class="btn" id="openAppBtn" style="background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);">
+            🚀 Ouvrir l'application
+        </button>
+        
+        <div class="info">
+            <p><strong>Comment ça marche?</strong></p>
+            <p>1. Télécharge le jeu via le bouton ci-dessus</p>
+            <p>2. Le code de parrainage sera appliqué automatiquement!</p>
+            <p>3. Profite de tes récompenses 🎁</p>
+        </div>
+    </div>
+
+    <script>
+        // Récupérer le code depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralCode = urlParams.get('code') || urlParams.get('ref');
+        
+        const packageName = 'com.Dauof.BloxingWorld_Blox_World.com';
+        const appScheme = 'BloxyRbxWorld://referral/';
+        
+        // Afficher le code
+        if (referralCode) {
+            document.getElementById('codeDisplay').textContent = referralCode;
+        } else {
+            document.getElementById('codeDisplay').textContent = 'Code non trouvé';
+        }
+        
+        // Créer le lien Play Store avec referrer
+        const encodedReferrer = encodeURIComponent(`referral=${referralCode}`);
+        const playStoreUrl = `https://play.google.com/store/apps/details?id=${packageName}&referrer=${encodedReferrer}`;
+        
+        // Bouton téléchargement
+        document.getElementById('downloadBtn').href = playStoreUrl;
+        
+        // Bouton ouvrir l'app (si déjà installée)
+        document.getElementById('openAppBtn').addEventListener('click', function() {
+            const deepLink = appScheme + referralCode;
+            
+            // Essayer d'ouvrir l'app
+            window.location.href = deepLink;
+            
+            // Si l'app n'est pas installée, rediriger vers Play Store après 2 secondes
+            setTimeout(function() {
+                window.location.href = playStoreUrl;
+            }, 2000);
+        });
+        
+        // Détection automatique et redirection
+        function detectAndRedirect() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isAndroid = userAgent.indexOf('android') > -1;
+            
+            if (isAndroid && referralCode) {
+                // Essayer d'ouvrir l'app si installée
+                const deepLink = appScheme + referralCode;
+                window.location.href = deepLink;
+                
+                // Sinon rediriger vers Play Store
+                setTimeout(function() {
+                    window.location.href = playStoreUrl;
+                }, 1500);
+            }
+        }
+        
+        // Auto-redirect après 3 secondes (optionnel)
+        // setTimeout(detectAndRedirect, 3000);
+    </script>
+</body>
+</html>
