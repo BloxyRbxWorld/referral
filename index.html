@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejoins-moi sur Bloxy World!</title>
+    <title>Join me on Bloxy Rbx World!</title>
     <style>
         * {
             margin: 0;
@@ -131,84 +131,84 @@
 <body>
     <div class="container">
         <div class="logo">🎮</div>
-        <h1>Rejoins-moi sur Bloxy World!</h1>
-        <p class="subtitle">Utilise mon code de parrainage et gagne des récompenses!</p>
+        <h1>Join me on Bloxy Rbx World!</h1>
+        <p class="subtitle">Use my referral code and earn rewards!</p>
         
         <div class="code-display" id="codeDisplay">
-            Chargement...
+           Loading...
         </div>
         
         <div class="spinner" id="spinner"></div>
         
         <a href="#" class="btn" id="downloadBtn">
-            📱 Télécharger depuis Google Play
+            📱 Download on Google Play
         </a>
         
         <button class="btn" id="openAppBtn" style="background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);">
-            🚀 Ouvrir l'application
+            🚀 Open the App
         </button>
         
         <div class="info">
-            <p><strong>Comment ça marche?</strong></p>
-            <p>1. Télécharge le jeu via le bouton ci-dessus</p>
-            <p>2. Le code de parrainage sera appliqué automatiquement!</p>
-            <p>3. Profite de tes récompenses 🎁</p>
+            <p><strong>How does it work?</strong></p>
+            <p>1. Download the game using the button above</p>
+            <p>2. The referral code will be automatically applied!</p>
+            <p>3. Enjoy your rewards 🎁</p>
         </div>
     </div>
 
     <script>
-        // Récupérer le code depuis l'URL
+        // Get the referral code from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const referralCode = urlParams.get('code') || urlParams.get('ref');
         
         const packageName = 'com.Dauof.BloxingWorld_Blox_World.com';
         const appScheme = 'BloxyRbxWorld://referral/';
         
-        // Afficher le code
+        // Display the code
         if (referralCode) {
             document.getElementById('codeDisplay').textContent = referralCode;
         } else {
-            document.getElementById('codeDisplay').textContent = 'Code non trouvé';
+            document.getElementById('codeDisplay').textContent = 'Code not found';
         }
         
-        // Créer le lien Play Store avec referrer
+        // Create the Play Store link with referrer
         const encodedReferrer = encodeURIComponent(`referral=${referralCode}`);
         const playStoreUrl = `https://play.google.com/store/apps/details?id=${packageName}&referrer=${encodedReferrer}`;
         
-        // Bouton téléchargement
+        // Download button
         document.getElementById('downloadBtn').href = playStoreUrl;
         
-        // Bouton ouvrir l'app (si déjà installée)
+        // Open app button (if already installed)
         document.getElementById('openAppBtn').addEventListener('click', function() {
             const deepLink = appScheme + referralCode;
             
-            // Essayer d'ouvrir l'app
+            // Try to open the app
             window.location.href = deepLink;
             
-            // Si l'app n'est pas installée, rediriger vers Play Store après 2 secondes
+            // If the app isn't installed, redirect to Play Store after 2 seconds
             setTimeout(function() {
                 window.location.href = playStoreUrl;
             }, 2000);
         });
         
-        // Détection automatique et redirection
+        // Automatic detection and redirection
         function detectAndRedirect() {
             const userAgent = navigator.userAgent.toLowerCase();
             const isAndroid = userAgent.indexOf('android') > -1;
             
             if (isAndroid && referralCode) {
-                // Essayer d'ouvrir l'app si installée
+                // Try opening the app if installed
                 const deepLink = appScheme + referralCode;
                 window.location.href = deepLink;
                 
-                // Sinon rediriger vers Play Store
+                // Otherwise redirect to Play Store
                 setTimeout(function() {
                     window.location.href = playStoreUrl;
                 }, 1500);
             }
         }
         
-        // Auto-redirect après 3 secondes (optionnel)
+        // Auto-redirect after 3 seconds (optional)
         // setTimeout(detectAndRedirect, 3000);
     </script>
 </body>
