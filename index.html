@@ -46,12 +46,16 @@
             width: 120px;
             height: 120px;
             margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
         }
         
         h1 {
@@ -122,15 +126,13 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🎮</div>
+        <div class="logo">
+            <img src="https://github.com/BloxyRbxWorld/image/blob/main/icone.png?raw=true" alt="Bloxy Rbx World Icon">
+        </div>
         <h1>Join me on Bloxy Rbx World!</h1>
         <p class="subtitle">Use my referral code and earn rewards!</p>
         
@@ -190,26 +192,6 @@
                 window.location.href = playStoreUrl;
             }, 2000);
         });
-        
-        // Automatic detection and redirection
-        function detectAndRedirect() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            const isAndroid = userAgent.indexOf('android') > -1;
-            
-            if (isAndroid && referralCode) {
-                // Try opening the app if installed
-                const deepLink = appScheme + referralCode;
-                window.location.href = deepLink;
-                
-                // Otherwise redirect to Play Store
-                setTimeout(function() {
-                    window.location.href = playStoreUrl;
-                }, 1500);
-            }
-        }
-        
-        // Auto-redirect after 3 seconds (optional)
-        // setTimeout(detectAndRedirect, 3000);
     </script>
 </body>
 </html>
