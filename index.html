@@ -126,12 +126,32 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .copy-btn {
+            background: #4caf50;
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        
+        .copy-btn:hover {
+            background: #43a047;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://github.com/BloxyRbxWorld/image/blob/main/icone.png?raw=true" alt="Bloxy Rbx World Icon">
+            <img src="https://github.com/BloxyRbxWorld/image/blob/main/icone.png?raw=true" alt="Bloxy Rbx World Icon" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iMzAiIGZpbGw9IiM2NjdlZWEiLz4KPHRleHQgeD0iNjAiIHk9IjY1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0Ij5CbG94eTwvdGV4dD4KPC9zdmc+'">
         </div>
         <h1>Join me on Bloxy Rbx World!</h1>
         <p class="subtitle">Use my referral code and earn rewards!</p>
@@ -139,6 +159,12 @@
         <div class="code-display" id="codeDisplay">
            Loading...
         </div>
+        
+        <button class="btn copy-btn" id="copyBtn">
+            📋 Copy Code
+        </button>
+        
+        <div class="error-message" id="errorMessage"></div>
         
         <div class="spinner" id="spinner"></div>
         
@@ -156,22 +182,42 @@
             <p>2. The referral code will be automatically applied!</p>
             <p>3. Enjoy your rewards 🎁</p>
         </div>
+        
+        <div class="info" style="margin-top: 15px;">
+            <p><strong>Troubleshooting:</strong></p>
+            <p>If the code doesn't appear, try:</p>
+            <p>• Refreshing the page</p>
+            <p>• Using the URL: https://bloxyrbx.site/referral/?code=20334C20</p>
+            <p>• Contacting support if the problem persists</p>
+        </div>
     </div>
 
     <script>
         // Get the referral code from the URL
         const urlParams = new URLSearchParams(window.location.search);
-        const referralCode = urlParams.get('code') || urlParams.get('ref');
+        let referralCode = urlParams.get('code') || urlParams.get('ref');
+        
+        // If no code in URL, try to extract from path
+        if (!referralCode) {
+            const pathParts = window.location.pathname.split('/');
+            const possibleCode = pathParts[pathParts.length - 1];
+            if (possibleCode && possibleCode.length > 3) {
+                referralCode = possibleCode;
+            }
+        }
+        
+        // Fallback code if none found
+        if (!referralCode) {
+            referralCode = '20334C20'; // Your default code
+            document.getElementById('errorMessage').textContent = 'No referral code found in URL. Using default code.';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
         
         const packageName = 'com.Dauof.BloxingWorld_Blox_World.com';
-        const appScheme = 'BloxyRbxWorld://referral/';
+        const appScheme = 'BloxyRbx://referral/';
         
         // Display the code
-        if (referralCode) {
-            document.getElementById('codeDisplay').textContent = referralCode;
-        } else {
-            document.getElementById('codeDisplay').textContent = 'Code not found';
-        }
+        document.getElementById('codeDisplay').textContent = referralCode;
         
         // Create the Play Store link with referrer
         const encodedReferrer = encodeURIComponent(`referral=${referralCode}`);
@@ -180,18 +226,37 @@
         // Download button
         document.getElementById('downloadBtn').href = playStoreUrl;
         
+        // Copy button
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            navigator.clipboard.writeText(referralCode).then(function() {
+                const originalText = this.textContent;
+                this.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            }.bind(this));
+        });
+        
         // Open app button (if already installed)
         document.getElementById('openAppBtn').addEventListener('click', function() {
             const deepLink = appScheme + referralCode;
+            
+            // Show spinner
+            document.getElementById('spinner').style.display = 'block';
             
             // Try to open the app
             window.location.href = deepLink;
             
             // If the app isn't installed, redirect to Play Store after 2 seconds
             setTimeout(function() {
+                document.getElementById('spinner').style.display = 'none';
                 window.location.href = playStoreUrl;
             }, 2000);
         });
+        
+        // Debug info
+        console.log('Referral code:', referralCode);
+        console.log('Full URL:', window.location.href);
     </script>
 </body>
 </html>
